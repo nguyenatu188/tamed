@@ -5,7 +5,7 @@ import generateToken from '../utils/generateToken.js'
 
 export const login = async (req: Request, res:Response) => {
   try {
-    const { username, password } = req.body
+    const { username, password } = req.body //destructuring
     const user = await prisma.user.findUnique({ where: { username } })
     if (!user) {
       return res.status(400).json({message: "Invalid credentials"})
@@ -25,7 +25,7 @@ export const login = async (req: Request, res:Response) => {
     })
   } catch (error) {
     console.log(error)
-    return res.status(500).json({message: "Internal server error"})
+    res.status(500).json({message: "Internal server error"})
   }
 }
 
