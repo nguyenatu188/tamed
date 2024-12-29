@@ -6,7 +6,7 @@ const useRegister = () => {
   const [isLoading, setLoading] = useState(false)
   const { setAuthUser } = useAuthContext()
 
-  const register = async (inputs: { fullName: string, username: string, password: string, confirmPassword: string, gender: string }) => {
+  const register = async (inputs: { fullname: string, username: string, password: string, confirmPassword: string, gender: string }) => {
     setLoading(true)
     try {
       const res = await fetch("/api/auth/register", {
@@ -22,7 +22,6 @@ const useRegister = () => {
       }
       setAuthUser(data)
     } catch (error:any) {
-      console.error(error.message)
       toast.error(error.message)
     } finally {
     setLoading(false)

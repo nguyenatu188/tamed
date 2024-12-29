@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-export interface ConversationState {
+interface ConversationState {
   selectedConversation: ConversationType | null
   messages: MessageType[]
   setSelectedConversation: (conversation: ConversationType | null) => void
