@@ -1,6 +1,6 @@
-import { Send } from "lucide-react";
-import { useState } from "react";
-import useSendMessage from "../../hooks/useSendMessage";
+import { Send } from "lucide-react"
+import { useState } from "react"
+import useSendMessage from "../../hooks/useSendMessage"
 
 const MessageInput = () => {
 	const [ message, setMessage ] = useState('')
@@ -29,6 +29,6 @@ const MessageInput = () => {
 				</button>
 			</div>
 		</form>
-	);
-};
-export default MessageInput;
+	)
+}
+export default MessageInput

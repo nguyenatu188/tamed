@@ -56,7 +56,7 @@ export const sendMessage = async (req: Request, res: Response) => {
       io.to(receiverSocketId).emit("newMessage", newMessage)
     }
 
-    res.status(200).json(newMessage)
+    res.status(201).json(newMessage)
   } catch (error:any) {
     console.log(error.message);
     res.status(500).json({ error: "Internal server error" });
@@ -65,7 +65,7 @@ export const sendMessage = async (req: Request, res: Response) => {
 
 export const getMessage = async (req: Request, res: Response) => {
   try {
-    const { id:userToChatId } = req.params
+    const { id: userToChatId } = req.params
     const senderId = req.user.id
 
     const conversation = await prisma.conversation.findFirst({
@@ -84,13 +84,13 @@ export const getMessage = async (req: Request, res: Response) => {
     })
 
     if (!conversation) {
-      return res.status(200).json({});
+      return res.status(200).json([]);
     }
 
     res.status(200).json(conversation.messages)
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error:any) {
+    console.log(error.message)
+    res.status(500).json({ error: "Internal server error" })
   }
 }
 
@@ -111,8 +111,8 @@ export const getUsersForSidebar = async (req: Request, res: Response) => {
       }
     })
     res.status(200).json(users)
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 }

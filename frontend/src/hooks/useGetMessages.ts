@@ -16,17 +16,15 @@ const useGetMessages = () => {
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || "Something went wrong")
         setMessages(data)
-
-    } catch (error:any) {
-      toast.error(error.message)
-    } finally {
-      setLoading(false)
+      } catch (error:any) {
+        toast.error(error.message)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
-  getMessages()
+    getMessages()
   }, [selectedConversation, setMessages])
-
-  return { loading, messages }
+  return { messages, loading }
 }
 
 export default useGetMessages

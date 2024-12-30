@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch backend/src --exec tsx backend/src/index.ts"
+    "dev": "nodemon --watch backend/src --exec tsx backend/src/index.ts",
+    "build": "tsc"
   },
   "type": "module",
   "keywords": [],
