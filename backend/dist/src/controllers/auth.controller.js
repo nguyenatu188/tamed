@@ -6,23 +6,25 @@ export const login = async (req, res) => {
         const { username, password } = req.body; //destructuring
         const user = await prisma.user.findUnique({ where: { username } });
         if (!user) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            res.status(400).json({ error: "Invalid credentials" });
+            return;
         }
         const isPasswordCorrect = await bcryptjs.compare(password, user.password);
         if (!isPasswordCorrect) {
-            return res.status(400).json({ message: "Invalid password" });
+            res.status(400).json({ error: "Invalid password" });
+            return;
         }
         generateToken(user.id, res);
         res.status(200).json({
             id: user.id,
             fullname: user.fullname,
             username: user.username,
-            profilePic: user.profilePic
+            profilePic: user.profilePic,
         });
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.log(error.message);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 export const logout = async (req, res) => {
@@ -31,22 +33,25 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "Logged out" });
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Internal server error" });
+        console.log(error.message);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 export const register = async (req, res) => {
     try {
         const { fullname, username, password, confirmPassword, gender } = req.body;
         if (!fullname || !username || !password || !confirmPassword || !gender) {
-            return res.status(400).json({ message: "All fields are required" });
+            res.status(400).json({ error: "All fields are required" });
+            return;
         }
         if (password !== confirmPassword) {
-            return res.status(400).json({ message: "Passwords do not match" });
+            res.status(400).json({ error: "Passwords do not match" });
+            return;
         }
         const user = await prisma.user.findUnique({ where: { username } });
         if (user) {
-            return res.status(400).json({ message: "User already exists" });
+            res.status(400).json({ error: "User already exists" });
+            return;
         }
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
@@ -58,25 +63,25 @@ export const register = async (req, res) => {
                 username,
                 password: hashedPassword,
                 gender,
-                profilePic: gender === "male" ? boyProfile : girlProfile
-            }
+                profilePic: gender === "male" ? boyProfile : girlProfile,
+            },
         });
         if (newUser) {
             generateToken(newUser.id, res);
-            return res.status(201).json({
+            res.status(201).json({
                 id: newUser.id,
                 fullname: newUser.fullname,
                 username: newUser.username,
-                profilePic: newUser.profilePic
+                profilePic: newUser.profilePic,
             });
         }
         else {
-            return res.status(400).json({ message: "Invalid user data" });
+            res.status(400).json({ error: "Invalid user data" });
         }
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: "Internal server error" });
+        console.log(error.message);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 //get the current user
@@ -84,7 +89,8 @@ export const getMe = async (req, res) => {
     try {
         const user = await prisma.user.findUnique({ where: { id: req.user.id } });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            res.status(404).json({ message: "User not found" });
+            return;
         }
         res.status(200).json({
             id: user.id,
@@ -95,6 +101,6 @@ export const getMe = async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal server error" });
     }
 };
