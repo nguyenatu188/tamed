@@ -84,7 +84,8 @@ export const getMessage = async (req: Request, res: Response) => {
     })
 
     if (!conversation) {
-      return res.status(200).json([]);
+      res.status(200).json([]);
+      return
     }
 
     res.status(200).json(conversation.messages)
